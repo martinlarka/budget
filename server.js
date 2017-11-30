@@ -3,6 +3,7 @@ var path = require('path'),
 		app = express(),
 		webpackDevHelper = require('./index.dev.js'),
     api = require('./api/api.js')
+    bodyParser = require('body-parser')
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -12,6 +13,8 @@ if (process.env.NODE_ENV !== 'production') {
     console.log('PRODUCTION ENVIRONMENT')
     app.use('/js', express.static(__dirname + '/dist/js'))
 }
+ 
+app.use(bodyParser.json());
 
 // Setting up express to serve static files
 app.use(express.static(path.join(__dirname, 'dist')))
