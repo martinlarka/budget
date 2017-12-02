@@ -12,3 +12,15 @@ body {
 .month-picker {
 	padding: 20px 0;
 }
+
+.col-12 {
+	margin-bottom: 20px;
+}
+
+.form-group {
+	margin-bottom: 15px;
+}
+
+.send-btn-holder {
+	padding-top: 10px;
+}

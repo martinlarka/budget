@@ -106,7 +106,7 @@ class DisplayBudget extends React.Component{
 			    		Köp <small className="text-muted">mellan {_.first(days)} och {_.last(days)}</small>
 			    	</h3>
 			    	<ResponsiveContainer width='100%' height={250}>
-						<BarChart barCategoryGap={10} data={this.mapBarData(result)} > 
+						<BarChart barCategoryGap={5} data={this.mapBarData(result)} > 
 							<CartesianGrid strokeDasharray="3 3" />
 							<XAxis dataKey="date" />
 							<YAxis />

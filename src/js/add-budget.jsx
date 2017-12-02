@@ -47,12 +47,21 @@ class AddBudget extends React.Component{
 			    		Lägg till <small className="text-muted">data</small>
 			    	</h3>
 					<div className="form-group">
-						<label htmlFor="exampleFormControlTextarea1">Example textarea</label>
+						<label>Data</label>
 						<textarea className="form-control"  rows="3" cols="30" value={this.state.value} onChange={this.handleChange}></textarea>
+						<div className='send-btn-holder'>
+							<button className="btn btn-outline-primary" onClick={this.uploadData}>{this.state.buttonState}</button>
+							{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
+						</div>
 					</div>
-					<div>
-						<button className="btn btn-outline-primary" onClick={this.uploadData}>{this.state.buttonState}</button>
-						{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
+					
+					<div className="form-group">
+						<label>Budget</label>
+						<input 
+							type="number" 
+							className="form-control" 
+							value={this.state.budget} 
+							onChange={(e) => this.setState({budget: e.target.value})} />
 					</div>
 				</div>
 			</div>
