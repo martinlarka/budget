@@ -34,11 +34,11 @@ router.post('/budget/add/', function(req, res, next) {
   .map((r) => r.split('\t'))
   .map((r) => {
     return {
-      date:     r[0], 
+      date:     parseDate(r[0]), 
       purchase: r[1], 
       city:     r[2], 
       who:      r[3],
-      price:    parseFloat(r[4].replace(',', '.').replace('−', '-').replace(' ', ''))
+      price:    parseFloat(r[4].replace(',', '.').replace('−', '-').replace(' ', ''))
     }})
   .value();
   
@@ -49,5 +49,15 @@ router.post('/budget/add/', function(req, res, next) {
   });
   res.send({added: map.length});
 });
+
+parseDate = (date) => {
+  if (date === 'Igår') {
+    return moment().subtract(1, 'days').format('YYYY-MM-DD');
+  } else if (date === 'Idag') {
+    return moment().format('YYYY-MM-DD');
+  } else {
+    return date;
+  }
+}
 
 module.exports = router;

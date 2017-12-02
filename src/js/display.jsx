@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import _ from 'lodash';
 
 class DisplayBudget extends React.Component{
@@ -44,7 +44,7 @@ class DisplayBudget extends React.Component{
 
 		return _.map(group, (arr, date) => 
 			_.zipObject(_.concat(['date'], who), _.concat([date], _.map(who, (w) => _.reduce(arr, (sum, d) => {
-				if (d.who === w) return sum + Math.abs(d.price);
+				if (d.who === w && d.price < 0) return sum + Math.abs(d.price);
 				return sum;
 			}, 0)))));
 	}
@@ -67,14 +67,16 @@ class DisplayBudget extends React.Component{
 			    	<h3>
 			    		Köp <small className="text-muted">Mellan {_.first(days)} och {_.last(days)}</small>
 			    	</h3>
-					<BarChart width={730} height={250} barCategoryGap={10} data={this.mapBarData(result)} > 
-						<CartesianGrid strokeDasharray="3 3" />
-						<XAxis dataKey="date" />
-						<YAxis />
-						<Tooltip />
-						<Legend />
-						{bars}
-					</BarChart>
+			    	<ResponsiveContainer width='100%' height={250}>
+						<BarChart barCategoryGap={10} data={this.mapBarData(result)} > 
+							<CartesianGrid strokeDasharray="3 3" />
+							<XAxis dataKey="date" />
+							<YAxis />
+							<Tooltip />
+							<Legend />
+							{bars}
+						</BarChart>
+					</ResponsiveContainer>
 				</div>
 				<div className="col-12">
 					<table className="table table-hover table-responsive">
