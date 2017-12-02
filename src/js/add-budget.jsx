@@ -5,19 +5,31 @@ import styles from './style.css'
 
 class AddBudget extends React.Component{
 	// constructor to define initial state
-	constructor() {
+	constructor(props) {
 		super()
 		this.state = {
-			value: '',
+			entries: '',
+			budget: props.budget,
 			buttonState: 'Send data'
 		}
 
 		this.uploadData = this.uploadData.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+		this.handleDataChange = this.handleDataChange.bind(this);
+		this.handleBudgetChange = this.handleBudgetChange.bind(this);
 	}
 
-	handleChange(event) {
-		this.setState({value: event.target.value});
+	handleDataChange(event) {
+		this.setState({entries: event.target.value});
+	}
+
+	handleBudgetChange(event) {
+		this.setState({budget: event.target.value});
+	}
+
+	componentWillUpdate(nextProps, nextState) {
+		if (this.state.budget !== nextProps.budget) {
+			this.setState({budget: nextProps.budget});
+		}
 	}
 
 	uploadData() {
@@ -28,11 +40,13 @@ class AddBudget extends React.Component{
 		  method: 'post',
 		  url: '/api/budget/add/',
 		  data: {
-		    budget: self.state.value
+		    entries: self.state.entries,
+		    budget: self.state.budget
 		  }
 		})
 		.then(function (response) {
 			self.setState({buttonState: 'Send data', upladedRows: response.data.added, value: ''});
+			this.props.setBudget(self.state.budget)
 		})
 		.catch(function (error) {
 			self.setState({buttonState: 'Error'});
@@ -48,7 +62,7 @@ class AddBudget extends React.Component{
 			    	</h3>
 					<div className="form-group">
 						<label>Data</label>
-						<textarea className="form-control"  rows="3" cols="30" value={this.state.value} onChange={this.handleChange}></textarea>
+						<textarea className="form-control"  rows="3" cols="30" value={this.state.entries} onChange={this.handleDataChange}></textarea>
 						<div className='send-btn-holder'>
 							<button className="btn btn-outline-primary" onClick={this.uploadData}>{this.state.buttonState}</button>
 							{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
@@ -61,7 +75,7 @@ class AddBudget extends React.Component{
 							type="number" 
 							className="form-control" 
 							value={this.state.budget} 
-							onChange={(e) => this.setState({budget: e.target.value})} />
+							onChange={this.handleBudgetChange} />
 					</div>
 				</div>
 			</div>

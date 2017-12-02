@@ -10,7 +10,8 @@ class DisplayBudget extends React.Component{
 		super()
 		this.state = {
 			result: [],
-			colors: ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551']
+			colors: ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551'],
+			budget: 20000
 		}
 
 		this.getData = this.getData.bind(this);
@@ -28,8 +29,6 @@ class DisplayBudget extends React.Component{
 
 	getData(month) {
 		const self = this;
-
-		self.setState({buttonState: 'Sending..'});
 		axios({
 		  method: 'get',
 		  url: '/api/budget/get/',
@@ -64,12 +63,11 @@ class DisplayBudget extends React.Component{
 			_.zipObject(['date', 'spent', 'budget'], [date, _.reduce(arr, (sum, d) => {
 				if (d.price < 0) return sum + Math.abs(d.price);
 				return sum;
-			}, 0), 20000]));
+			}, 0), this.state.budget]));
 
 		for (var i = 1; i < out.length; i++) {
 			out[i].spent += out[i-1].spent;
 		}
-		console.log(out);
 		return out;
 	}
 	  
@@ -129,7 +127,7 @@ class DisplayBudget extends React.Component{
 							<Tooltip />
 							<Legend />
 							<Line type="monotone" dataKey="budget" stroke="#F72C25" />
-							<Line type="monotone" dataKey="spent" stroke="#89FC00" />
+							<Line type="monotone" dataKey="spent" stroke="#345995" />
 						</LineChart>		
 					</ResponsiveContainer>
 				</div>
