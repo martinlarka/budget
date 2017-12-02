@@ -35,7 +35,6 @@ router.get('/budget/get/', function(req, res, next) {
     return toDate.subtract(1, 'days').format('YYYY-MM-DD');
   }).sort();
 
-  console.log(fromDate, toDate, days);
   client.mget(days, function (err, data) {
     if (err) return res.sendStatus(500);
     const result = _.pull(_.flatten(_.map(data, JSON.parse)), null);

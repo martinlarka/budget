@@ -23,7 +23,7 @@ class DisplayBudget extends React.Component{
 
 	componentWillUpdate(nextProps, nextState) {
 		if (this.state.selectedMonth !== nextState.selectedMonth) {
-			this.getData(nextState.selectedMonth+1);
+			this.getData(nextState.selectedMonth);
 		}
 	}
 
