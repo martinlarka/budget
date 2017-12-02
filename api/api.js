@@ -11,14 +11,22 @@ client.on("error", function (err) {
 });
 
 router.get('/budget/get/', function(req, res, next) {
-  let fromDate;
-  if (moment().get('date') < 25) {
-    fromDate = moment().set('month', moment().month()-1).set('date', 25);  
+  let fromDate, toDate;
+  if (req.query.month) {
+    const month = parseInt(req.query.month);
+    fromDate = moment().set({'month': month, 'date': 1});
+    toDate = moment().set({'month': month + 1, 'date': 1});
   } else {
-    fromDate = moment().set('month', moment().month()).set('date', 25);  
+    toDate = moment();
+    if (moment().get('date') < 25) {
+      fromDate = moment().set('month', moment().month()-1).set('date', 25);  
+    } else {
+      fromDate = moment().set('month', moment().month()).set('date', 25);  
+    }
   }
-  const days = _.times(moment().diff(fromDate, 'days'), (i) => {
-    return moment().subtract(i, 'days').format('YYYY-MM-DD');
+
+  const days = _.times(toDate.diff(fromDate, 'days'), (i) => {
+    return fromDate.subtract(1, 'days').format('YYYY-MM-DD');
   }).sort();
 
   client.mget(days, function (err, data) {

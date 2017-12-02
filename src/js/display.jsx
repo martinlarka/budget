@@ -1,7 +1,8 @@
-import React from 'react'
-import axios from 'axios'
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React from 'react';
+import axios from 'axios';
+import { ResponsiveContainer, BarChart, LineChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import _ from 'lodash';
+import moment from 'moment';
 
 class DisplayBudget extends React.Component{
 	// constructor to define initial state
@@ -19,13 +20,22 @@ class DisplayBudget extends React.Component{
 		this.getData();
 	}
 
-	getData() {
+	componentWillUpdate(nextProps, nextState) {
+		if (this.state.selectedMonth !== nextState.selectedMonth) {
+			this.getData(nextState.selectedMonth+1);
+		}
+	}
+
+	getData(month) {
 		const self = this;
 
 		self.setState({buttonState: 'Sending..'});
 		axios({
 		  method: 'get',
 		  url: '/api/budget/get/',
+		  params: {
+			month
+		  }
 		})
 		.then(function (response) {
 			const { days, result } = response.data;
@@ -40,13 +50,27 @@ class DisplayBudget extends React.Component{
 		const group = _.groupBy(data, (d) => d.date);
 		const who = _.uniq(_.map(data, 'who'));
 
-		//. {date, martin, debbie}
-
 		return _.map(group, (arr, date) => 
 			_.zipObject(_.concat(['date'], who), _.concat([date], _.map(who, (w) => _.reduce(arr, (sum, d) => {
 				if (d.who === w && d.price < 0) return sum + Math.abs(d.price);
 				return sum;
 			}, 0)))));
+	}
+
+	mapLineData(data) {
+		const group = _.groupBy(data, (d) => d.date);
+		// {date, budget, spent}
+		let out = _.map(group, (arr, date) => 
+			_.zipObject(['date', 'spent', 'budget'], [date, _.reduce(arr, (sum, d) => {
+				if (d.price < 0) return sum + Math.abs(d.price);
+				return sum;
+			}, 0), 20000]));
+
+		for (var i = 1; i < out.length; i++) {
+			out[i].spent += out[i-1].spent;
+		}
+		console.log(out);
+		return out;
 	}
 	  
 	render() {
@@ -63,9 +87,23 @@ class DisplayBudget extends React.Component{
 
 		return (
 			<div className="row justify-content-md-center">
+				<div className="col-auto month-picker">
+					<div className="btn-group" role="group" aria-label="Basic example">
+						{_.times(12, (i) => 
+							<button 
+								onClick={() => this.setState({selectedMonth: i})}
+								key={'month-button-'+i} 
+								type="button" 
+								className={'btn ' + (this.state.selectedMonth === i ? 'btn-primary' : 'btn-secondary')}
+							>
+								{moment().set('month', i).format('MMM')}
+							</button>
+						)}
+					</div>
+				</div>
 			    <div className="col-12">
 			    	<h3>
-			    		Köp <small className="text-muted">Mellan {_.first(days)} och {_.last(days)}</small>
+			    		Köp <small className="text-muted">mellan {_.first(days)} och {_.last(days)}</small>
 			    	</h3>
 			    	<ResponsiveContainer width='100%' height={250}>
 						<BarChart barCategoryGap={10} data={this.mapBarData(result)} > 
@@ -76,6 +114,23 @@ class DisplayBudget extends React.Component{
 							<Legend />
 							{bars}
 						</BarChart>
+					</ResponsiveContainer>
+				</div>
+				<div className="col-12">
+			    	<h3>
+			    		Budget <small className="text-muted">mellan {_.first(days)} och {_.last(days)}</small>
+			    	</h3>
+			    	<ResponsiveContainer width='100%' height={250}>
+						<LineChart width={730} height={250} data={this.mapLineData(result)}
+							margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+							<CartesianGrid strokeDasharray="3 3" />
+							<XAxis dataKey="name" />
+							<YAxis />
+							<Tooltip />
+							<Legend />
+							<Line type="monotone" dataKey="budget" stroke="#F72C25" />
+							<Line type="monotone" dataKey="spent" stroke="#89FC00" />
+						</LineChart>		
 					</ResponsiveContainer>
 				</div>
 				<div className="col-12">

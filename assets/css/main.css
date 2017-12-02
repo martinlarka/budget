@@ -8,3 +8,7 @@ body {
 .added-info {
 	margin-left: 10px;
 }
+
+.month-picker {
+	padding: 20px 0;
+}
