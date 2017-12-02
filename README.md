@@ -1,20 +1,8 @@
-# React-Express-Boilerplate
-A React Express Webpack Boilerplate to get started to development.
+# Budget
 
-### Features
-- React
-- Express
-- React-Router
-- Webpack
-- ES6 Support
-- CSS-Loaders
-- Hot Reload Module
+#### Requirements
+Redis
 
-#### To get started
-```shell
-$ git clone https://www.github.com/htadg/React-Express-Boilerplate.git <YOUR_PROJECT_NAME>
-$ yarn install
-```
 #### To start a development server
 ```shell
 $ yarn start
