@@ -14,7 +14,7 @@ class App extends React.Component{
 	
 	render() {
 		return (
-			<div className={`container ${styles.div}`}>
+			<div className={`container`}>
 				<Display />
 				<AddBudget />
 			</div>

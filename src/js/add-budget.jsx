@@ -32,7 +32,7 @@ class AddBudget extends React.Component{
 		  }
 		})
 		.then(function (response) {
-			self.setState({buttonState: 'Send data'});
+			self.setState({buttonState: 'Send data', upladedRows: response.data.added, value: ''});
 		})
 		.catch(function (error) {
 			self.setState({buttonState: 'Error'});
@@ -41,10 +41,20 @@ class AddBudget extends React.Component{
 	  
 	render() {
 		return (
-			<div>
-				<h1>Add data</h1>
-				<textarea rows="10" cols="30" value={this.state.value} onChange={this.handleChange}></textarea>
-				<button onClick={this.uploadData}>{this.state.buttonState}</button>
+			<div className="row justify-content-md-center">
+			    <div className="col-12">
+					<h3>
+			    		Lägg till <small className="text-muted">data</small>
+			    	</h3>
+					<div className="form-group">
+						<label htmlFor="exampleFormControlTextarea1">Example textarea</label>
+						<textarea className="form-control"  rows="3" cols="30" value={this.state.value} onChange={this.handleChange}></textarea>
+					</div>
+					<div>
+						<button className="btn btn-outline-primary" onClick={this.uploadData}>{this.state.buttonState}</button>
+						{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
+					</div>
+				</div>
 			</div>
 		)
 	}

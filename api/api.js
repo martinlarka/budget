@@ -19,7 +19,7 @@ router.get('/budget/get/', function(req, res, next) {
   }
   const days = _.times(moment().diff(fromDate, 'days'), (i) => {
     return moment().subtract(i, 'days').format('YYYY-MM-DD');
-  });
+  }).sort();
 
   client.mget(days, function (err, data) {
     if (err) return res.sendStatus(500);
@@ -32,14 +32,14 @@ router.get('/budget/get/', function(req, res, next) {
 router.post('/budget/add/', function(req, res, next) {
   const map = _(req.body.budget).split('\n')
   .map((r) => r.split('\t'))
-  .map((r) => (
-    {
+  .map((r) => {
+    return {
       date:     r[0], 
       purchase: r[1], 
       city:     r[2], 
       who:      r[3],
-      price:    parseFloat(r[4].replace(',', '.').replace('−', '-'))
-    }))
+      price:    parseFloat(r[4].replace(',', '.').replace('−', '-').replace(' ', ''))
+    }})
   .value();
   
   const dateGroup = _.groupBy(map, (r) => r.date);
@@ -47,7 +47,7 @@ router.post('/budget/add/', function(req, res, next) {
   _.forEach(dateGroup, (arr, d) => {
     client.set(d, JSON.stringify(arr));
   });
-  res.sendStatus(200);
+  res.send({added: map.length});
 });
 
 module.exports = router;
