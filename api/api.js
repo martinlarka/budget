@@ -21,11 +21,11 @@ router.get('/budget/get/', function(req, res, next) {
     return moment().subtract(i, 'days').format('YYYY-MM-DD');
   });
 
-  client.mget(days, function (err, result) {
+  client.mget(days, function (err, data) {
     if (err) return res.sendStatus(500);
-    const parsed = _.pull(_.flatten(_.map(result, JSON.parse)), null);
+    const result = _.pull(_.flatten(_.map(data, JSON.parse)), null);
 
-    res.send({result: _.map(parsed, (p) => ({x: p.date, y: p.price})), days});
+    res.send({result, days});
   });
 });
 
