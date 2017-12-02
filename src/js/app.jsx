@@ -14,6 +14,7 @@ class App extends React.Component{
 		}
 
 		this.getBudget = this.getBudget.bind(this);
+		this.setBudget = this.setBudget.bind(this);
 	}
 
 	componentDidMount() { 

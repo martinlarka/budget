@@ -23,13 +23,7 @@ class AddBudget extends React.Component{
 	}
 
 	handleBudgetChange(event) {
-		this.setState({budget: event.target.value});
-	}
-
-	componentWillUpdate(nextProps, nextState) {
-		if (this.state.budget !== nextProps.budget) {
-			this.setState({budget: nextProps.budget});
-		}
+		this.props.setBudget(event.target.value);
 	}
 
 	uploadData() {
@@ -41,12 +35,12 @@ class AddBudget extends React.Component{
 		  url: '/api/budget/add/',
 		  data: {
 		    entries: self.state.entries,
-		    budget: self.state.budget
+		    budget: self.props.budget
 		  }
 		})
 		.then(function (response) {
 			self.setState({buttonState: 'Send data', upladedRows: response.data.added, value: ''});
-			this.props.setBudget(self.state.budget)
+			this.props.setBudget(self.props.budget)
 		})
 		.catch(function (error) {
 			self.setState({buttonState: 'Error'});
@@ -68,8 +62,9 @@ class AddBudget extends React.Component{
 						<label>Budget</label>
 						<input 
 							type="number" 
-							className="form-control" 
-							value={this.state.budget} 
+							className="form-control"
+							step={1000}
+							value={this.props.budget} 
 							onChange={this.handleBudgetChange} />
 					</div>
 					<div className='send-btn-holder'>
