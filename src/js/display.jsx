@@ -70,18 +70,20 @@ class DisplayBudget extends React.Component{
 		}
 		return out;
 	}
-	  
-	render() {
-		const { result, colors, days } = this.state;
-		const bars = _.map(_.uniq(_.map(result, 'who')), (who, i) => <Bar key={who} dataKey={who} fill={colors[i]} stackId="a"/>)
-		const tableRows = _.flatMap(result, (r, i) => (
-			<tr key={'table-row-' + i}>
+
+	renderTableRows(data) {
+		return _.flatMap(data, (r, i) => (
+			<tr key={'table-row-' + i} className={r.date === this.state.selectedDate ? 'table-success' : ''}>
 				<th scope="row">{r.date}</th>
 				<td>{r.purchase}</td>
 				<td>{r.city}</td>
 				<td>{r.who}</td>
 				<td>{r.price}</td>
 			</tr>));
+	}
+	  
+	render() {
+		const { result, colors, days } = this.state;
 
 		return (
 			<div className="row justify-content-md-center">
@@ -110,7 +112,14 @@ class DisplayBudget extends React.Component{
 							<YAxis />
 							<Tooltip />
 							<Legend />
-							{bars}
+							{_.map(_.uniq(_.map(result, 'who')), (who, i) => 
+								<Bar 
+									key={who} 
+									dataKey={who} 
+									fill={colors[i]} 
+									stackId="a" 
+									onClick={(e) => this.setState({selectedDate: e.date})}/>
+							)}
 						</BarChart>
 					</ResponsiveContainer>
 				</div>
@@ -120,7 +129,7 @@ class DisplayBudget extends React.Component{
 			    	</h3>
 			    	<ResponsiveContainer width='100%' height={250}>
 						<LineChart width={730} height={250} data={this.mapLineData(result)}
-							margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+							margin={{ top: 5, right: 30, left: 20, bottom: 5 }} onClick={(e) => this.setState({selectedDate: e.activeLabel})}>
 							<CartesianGrid strokeDasharray="3 3" />
 							<XAxis dataKey="date" />
 							<YAxis />
@@ -143,7 +152,7 @@ class DisplayBudget extends React.Component{
 					    </tr>
 					  </thead>
 					  <tbody>
-					      {tableRows.reverse()}
+					      {this.renderTableRows(result).reverse()}
 					  </tbody>
 					</table>
 			    </div>
