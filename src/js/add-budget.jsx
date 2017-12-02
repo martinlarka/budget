@@ -63,12 +63,7 @@ class AddBudget extends React.Component{
 					<div className="form-group">
 						<label>Data</label>
 						<textarea className="form-control"  rows="3" cols="30" value={this.state.entries} onChange={this.handleDataChange}></textarea>
-						<div className='send-btn-holder'>
-							<button className="btn btn-outline-primary" onClick={this.uploadData}>{this.state.buttonState}</button>
-							{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
-						</div>
-					</div>
-					
+					</div>					
 					<div className="form-group">
 						<label>Budget</label>
 						<input 
@@ -76,6 +71,10 @@ class AddBudget extends React.Component{
 							className="form-control" 
 							value={this.state.budget} 
 							onChange={this.handleBudgetChange} />
+					</div>
+					<div className='send-btn-holder'>
+						<button className="btn btn-outline-primary" onClick={this.uploadData}>{this.state.buttonState}</button>
+						{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
 					</div>
 				</div>
 			</div>
