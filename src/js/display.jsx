@@ -138,8 +138,8 @@ class DisplayBudget extends React.Component{
 							<YAxis />
 							<Tooltip />
 							<Legend />
-							<Line type="monotone" dataKey="budget" stroke="#F72C25" />
-							<Line type="monotone" dataKey="spent" stroke="#345995" />
+							<Line type="monotone" dataKey="budget" dot={false} stroke="#F72C25" />
+							<Line type="monotone" dataKey="spent" dot={false} stroke="#345995" />
 						</LineChart>		
 					</ResponsiveContainer>
 				</div>
