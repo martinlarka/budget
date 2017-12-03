@@ -40,7 +40,7 @@ class AddBudget extends React.Component{
 		})
 		.then(function (response) {
 			self.setState({buttonState: 'Send data', upladedRows: response.data.added, value: ''});
-			this.props.setBudget(self.props.budget)
+			self.props.setBudget(self.props.budget)
 		})
 		.catch(function (error) {
 			self.setState({buttonState: 'Error'});

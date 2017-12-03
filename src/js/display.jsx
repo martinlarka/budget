@@ -10,8 +10,7 @@ class DisplayBudget extends React.Component{
 		super()
 		this.state = {
 			result: [],
-			colors: ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551'],
-			budget: 20000
+			colors: ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551']
 		}
 
 		this.getData = this.getData.bind(this);
@@ -25,6 +24,10 @@ class DisplayBudget extends React.Component{
 		if (this.state.selectedMonth !== nextState.selectedMonth) {
 			this.getData(nextState.selectedMonth);
 		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({budget: nextProps.budget});
 	}
 
 	getData(month) {
