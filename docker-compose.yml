@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    image: upsales/app-oneflow:latest
+    volumes:
+      - .:/app
+    links:
+      - "redis"
+    command: node server.js
+    ports: 
+      - "8409:8409"
+  redis:
+    image: redis:3.2.11
+    volumes:
+      - ./data:/data
