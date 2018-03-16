@@ -9,4 +9,5 @@ RUN npm install --quiet
 COPY . /app
 
 EXPOSE 3000
+CMD ["pwd"]
 CMD ["node", "server.js"]
