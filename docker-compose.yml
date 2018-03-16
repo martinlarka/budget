@@ -3,7 +3,6 @@ version: '2'
 services:
   app:
     build: .
-    image: upsales/app-oneflow:latest
     volumes:
       - .:/app
     links:
