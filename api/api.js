@@ -3,7 +3,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const redis = require("redis");
 
-const client = redis.createClient();
+const client = redis.createClient(6379, 'redis');
 const router = express.Router();
 
 client.on("error", function (err) {

@@ -3,12 +3,11 @@ version: '2'
 services:
   web:
     build: .
-    command: node server.js
     volumes:
       - .:/app
     links:
       - "redis"
-    ports: 
+    ports:
       - "3000:8484"
     depends_on:
       - redis
