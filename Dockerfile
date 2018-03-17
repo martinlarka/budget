@@ -1,12 +1,12 @@
-FROM node:8.5.0-alpine
+FROM node:carbon
 
-RUN mkdir -p /app
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY package.json .
+COPY package*.json ./
+
 RUN npm install
 
-COPY . /app
+COPY . .
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
