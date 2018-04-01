@@ -46,7 +46,25 @@ router.get('/budget/get/', function(req, res, next) {
 
 router.post('/budget/add/', function(req, res, next) {
   let map = []
-  if (req.body.entries) {
+  if (req.body.entries[0] === '{') {
+    map = _(JSON.parse(req.body.entries).transactions)
+    .map((r) => {
+      return {
+        date:     moment(r.transactionDate).format('YYYY-MM-DD'), 
+        purchase: r.description, 
+        city:     r.city, 
+        who:      r.cardHolderName,
+        price:    r.transactionAmount
+      }})
+    .value();
+    
+    const dateGroup = _.groupBy(map, (r) => r.date);
+
+    _.forEach(dateGroup, (arr, d) => {
+      client.set(d, JSON.stringify(arr));
+    });
+  } else if (req.body.entries) {
+    console.log('ELSE');
     map = _(req.body.entries).split('\n')
     .map((r) => r.split('\t'))
     .map((r) => {
