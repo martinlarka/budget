@@ -72,6 +72,7 @@ class AddBudget extends React.Component{
 						{this.state.upladedRows && <span className='added-info'>{this.state.upladedRows} rader inlagda</span>}
 					</div>
 				</div>
+				<p>{'0.0.2'}</p>
 			</div>
 		)
 	}

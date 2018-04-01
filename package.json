@@ -1,7 +1,7 @@
 {
  "name": "Budget",
  "description": "Import creditcard rows to keep track of your expenses",
- "version": "0.0.1",
+ "version": "0.0.2",
  "main": "./server.js",
  "author": "Martin Lärka",
  "license": "MIT",
