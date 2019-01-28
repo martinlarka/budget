@@ -13,6 +13,8 @@ class DisplayBudget extends React.Component{
 			colors: ['#EAC435', '#345995', '#03CEA4', '#FB4D3D', '#CA1551']
 		}
 
+		this.months = _.times(12, i => moment().subtract(i, 'months').format('YYYY MM')).reverse();
+
 		this.getData = this.getData.bind(this);
 	}
 
@@ -44,7 +46,7 @@ class DisplayBudget extends React.Component{
 			self.setState({ result, days});
 		})
 		.catch(function (error) {
-			console.log(error);q
+			console.log(error);
 		});
 	}
 
@@ -87,19 +89,18 @@ class DisplayBudget extends React.Component{
 	  
 	render() {
 		const { result, colors, days } = this.state;
-
 		return (
 			<div className="row justify-content-md-center">
 				<div className="col-auto month-picker">
 					<div className="btn-group" role="group" aria-label="Basic example">
-						{_.times(12, (i) => 
+						{this.months.map(month => 
 							<button 
-								onClick={() => this.setState({selectedMonth: i})}
-								key={'month-button-'+i} 
+								onClick={() => this.setState({selectedMonth: month})}
+								key={'month-button-' + month} 
 								type="button" 
-								className={'btn ' + (this.state.selectedMonth === i ? 'btn-primary' : 'btn-secondary')}
+								className={'btn ' + (this.state.selectedMonth === month ? 'btn-primary' : 'btn-secondary')}
 							>
-								{moment().set('month', i).format('MMM')}
+								{moment(month).format('MMM')}
 							</button>
 						)}
 					</div>

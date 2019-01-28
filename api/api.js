@@ -3,7 +3,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const redis = require("redis");
 
-const client = redis.createClient(6379, 'redis');
+const client = redis.createClient(6379, 'localhost');
 const router = express.Router();
 
 client.on("error", function (err) {
@@ -20,20 +20,19 @@ router.get('/budget', function(req, res, next) {
 router.get('/budget/get/', function(req, res, next) {
   let fromDate, toDate;
   if (req.query.month) {
-    const month = parseInt(req.query.month);
-    fromDate = moment().set({'month': month, 'date': 1});
-    toDate = moment().set({'month': month + 1, 'date': 1});
+    const month = moment(req.query.month, 'YYYY MM');
+    fromDate = moment(month).set({'date': 26});
+    toDate = moment(month).add(1, 'months').set({'date': 26});
   } else {
     toDate = moment().add('days', 1);
     if (moment().get('date') < 25) {
-      fromDate = moment().set('month', moment().month()-1).set('date', 25);  
+      fromDate = moment().set('month', moment().month()-1).set('date', 26);  
     } else {
-      fromDate = moment().set('month', moment().month()).set('date', 25);  
+      fromDate = moment().set('month', moment().month()).set('date', 26);  
     }
   }
-  const days = _.times(toDate.diff(fromDate, 'days'), (i) => {
-    return toDate.subtract(1, 'days').format('YYYY-MM-DD');
-  }).sort();
+  const days = _.times(toDate.diff(fromDate, 'days'), (i) => toDate.subtract(1, 'days').format('YYYY-MM-DD')).sort();
+
 
   client.mget(days, function (err, data) {
     if (err) return res.sendStatus(500);
